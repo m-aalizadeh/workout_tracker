@@ -1,10 +1,10 @@
 const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
-const User = require("../models/user");
+const User = require("../models/User");
+const { signToken } = require("../utils/isAuth");
 
 exports.signUp = async (req, res) => {
   try {
-    const { username, password } = req.body;
+    const { username, password, email } = req.body;
     if (!username || !password) {
       return res
         .status(400)
@@ -15,16 +15,19 @@ exports.signUp = async (req, res) => {
     if (existingUser) {
       return res.status(400).json({ message: "User Already Exists" });
     }
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({
       username,
+      email,
       password: hashedPassword,
     });
     await newUser.save();
-    return res
-      .status(200)
-      .json({ message: "User Created Successfully", newUser: newUser });
+    return res.status(200).json({
+      message: "User Created Successfully",
+      token: signToken({ username, userId: newUser._id.toString() }),
+      newUser,
+    });
   } catch (error) {
     console.log(error.message);
     return res.status(500).json({ message: "Error creating user" });
@@ -49,12 +52,7 @@ exports.signin = async (req, res) => {
     if (!passwordMatch) {
       return res.status(401).json({ message: "Invalid password" });
     }
-
-    const token = jwt.sign(
-      { userId: user._id, username: user.username },
-      process.env.SECRET_KEY || "1234!@#%<{*&)",
-      { expiresIn: "1h" }
-    );
+    const token = signToken({ username, userId: user._id.toString() });
     return res.status(200).json({
       message: "User signed in successfully",
       data: user,

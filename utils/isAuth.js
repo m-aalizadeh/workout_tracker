@@ -17,3 +17,9 @@ exports.verifyToken = async (req, res, next) => {
     return res.status(500).json({ message: "Error Validating Token" });
   }
 };
+
+exports.signToken = (payload) => {
+  return jwt.sign(payload, process.env.SECRET_KEY || "1234!@#%<{*&)", {
+    expiresIn: "1h",
+  });
+};
