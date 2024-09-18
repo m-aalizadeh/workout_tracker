@@ -3,17 +3,17 @@ const Exercise = require("../models/Exercise");
 const { validationResult } = require("express-validator");
 
 exports.addExercise = async (req, res) => {
-  const errors = validationResult(req);
+  const errors = validationResult(req).array();
   const { body } = req;
-  if (!errors.isEmpty()) {
-    return res.status(422).render("exercise/add", {
+  if (errors.length) {
+    return res.status(422).json({
       pageTitle: "Add Exercise",
       path: "exercise/add",
       editing: false,
       hasError: true,
       product: body,
-      errorMessage: errors.array()[0].msg,
-      validationErrors: errors.array(),
+      errorMessage: errors[0].msg,
+      validationErrors: errors,
     });
   }
   Exercise.create(body)
