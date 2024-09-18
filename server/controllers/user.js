@@ -1,21 +1,24 @@
 const bcrypt = require("bcrypt");
+const { validationResult } = require("express-validator");
 const User = require("../models/User");
 const { signToken } = require("../utils/isAuth");
 
 exports.signUp = async (req, res) => {
   try {
     const { username, password, email } = req.body;
-    if (!username || !password) {
-      return res
-        .status(400)
-        .json({ message: "Please Input Username and Password" });
+    const errors = validationResult(req).array();
+    if (errors.length) {
+      return res.status(422).json({
+        path: "/signup",
+        pageTitle: "Signup",
+        errorMessage: errors[0].msg,
+        oldInput: {
+          email,
+          password,
+        },
+        validationErrors: errors,
+      });
     }
-
-    const existingUser = await User.findOne({ username: username });
-    if (existingUser) {
-      return res.status(400).json({ message: "User Already Exists" });
-    }
-
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({
       username,
@@ -37,11 +40,18 @@ exports.signUp = async (req, res) => {
 exports.signin = async (req, res) => {
   try {
     const { username, password } = req.body;
-
-    if (!username || !password) {
-      return res
-        .status(400)
-        .json({ message: "Please Input username and password" });
+    const errors = validationResult(req).array();
+    if (errors.length) {
+      return res.status(422).json({
+        path: "/sign",
+        pageTitle: "Signin",
+        errorMessage: errors[0].msg,
+        oldInput: {
+          username,
+          password,
+        },
+        validationErrors: errors,
+      });
     }
     const user = await User.findOne({ username });
 

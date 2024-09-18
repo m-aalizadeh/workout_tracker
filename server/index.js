@@ -1,6 +1,7 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const userRouter = require("./routes/user");
+const exerciseRouter = require("./routes/exercise");
 const { connectDb } = require("./config/database");
 
 dotenv.config();
@@ -12,6 +13,7 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/api/v1/user", userRouter);
+app.use("/api/v1/exercise", exerciseRouter);
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to workout tracker application!!!" });
 });
