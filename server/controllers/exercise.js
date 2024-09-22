@@ -7,7 +7,7 @@ exports.addExercise = async (req, res) => {
   const { body } = req;
   if (errors.length) {
     return res.status(422).json({
-      product: body,
+      exercise: body,
       errorMessage: "Exercise creation got failed!",
       validationErrors: errors,
     });
