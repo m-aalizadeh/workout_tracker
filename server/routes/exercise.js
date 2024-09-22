@@ -1,5 +1,5 @@
 const express = require("express");
-const { body } = require("express-validator");
+const { body, check } = require("express-validator");
 const router = express.Router();
 const {
   addExercise,
@@ -27,8 +27,8 @@ router.post(
       )
       .trim(),
     body("duration").isNumeric().withMessage("Duration must be number").trim(),
-    // body("date").isISO8601().withMessage("Date format is invalid").trim(),
-    // body("userId").isUUID().withMessage("UserId must only contain UUIDs."),
+    body("date").isDate().withMessage("Date format is invalid").trim(),
+    check("userId").isMongoId().withMessage("UserId must only contain UUIDs."),
   ],
   addExercise
 );

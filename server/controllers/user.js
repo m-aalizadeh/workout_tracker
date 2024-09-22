@@ -9,12 +9,10 @@ exports.signUp = async (req, res) => {
     const errors = validationResult(req).array();
     if (errors.length) {
       return res.status(422).json({
-        path: "/signup",
-        pageTitle: "Signup",
-        errorMessage: errors[0].msg,
+        errorMessage: "User creation got failed!",
         oldInput: {
           email,
-          password,
+          username,
         },
         validationErrors: errors,
       });
@@ -43,18 +41,12 @@ exports.signin = async (req, res) => {
     const errors = validationResult(req).array();
     if (errors.length) {
       return res.status(422).json({
-        path: "/sign",
-        pageTitle: "Signin",
-        errorMessage: errors[0].msg,
-        oldInput: {
-          username,
-          password,
-        },
+        errorMessage: "User signin got failed!",
         validationErrors: errors,
       });
     }
-    const user = await User.findOne({ username });
 
+    const user = await User.findOne({ username });
     if (!user) {
       return res.status(401).json({ message: "Invalid username or password" });
     }

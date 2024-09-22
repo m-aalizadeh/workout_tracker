@@ -7,18 +7,14 @@ exports.addExercise = async (req, res) => {
   const { body } = req;
   if (errors.length) {
     return res.status(422).json({
-      pageTitle: "Add Exercise",
-      path: "exercise/add",
-      editing: false,
-      hasError: true,
       product: body,
-      errorMessage: errors[0].msg,
+      errorMessage: "Exercise creation got failed!",
       validationErrors: errors,
     });
   }
   Exercise.create(body)
     .then((dbExerciseData) => {
-      return User.findOneAndDelete(
+      return User.findOneAndUpdate(
         { _id: body.userId },
         { $push: { exercise: dbExerciseData._id } },
         { new: true }
@@ -26,9 +22,9 @@ exports.addExercise = async (req, res) => {
     })
     .then((dbUserData) => {
       if (!dbUserData) {
-        return res
-          .status(404)
-          .json({ message: "Exercise created but no user with this id!" });
+        return res.status(404).json({
+          message: "Exercise created but there is no user with this id!",
+        });
       }
       res.json({ message: "Exercise created successfully!" });
     })
@@ -64,9 +60,9 @@ exports.deleteExercise = async ({ params }, res) => {
     })
     .then((dbUserData) => {
       if (!dbUserData) {
-        return res
-          .status(404)
-          .json({ message: "Exercise deleted but no user with this id!" });
+        return res.status(404).json({
+          message: "Exercise deleted but there is no user with this id!",
+        });
       }
       res.json({ message: "Exercise deleted successfully!" });
     })
