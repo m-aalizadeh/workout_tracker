@@ -31,17 +31,25 @@ exports.addExercise = async (req, res) => {
     .catch((err) => err.status(500).json(err));
 };
 
-exports.getExerciseById = async ({ params }, res) => {
-  Exercise.findOne({ _id: params.id })
-    .then((dbExerciseData) => {
-      if (!dbExerciseData) {
-        return res
-          .status(404)
-          .json({ message: "No exercise data found with this id!" });
-      }
-      res.json(dbExerciseData);
+exports.getExerciseById = async ({ query = {} }, res) => {
+  try {
+    const { page = 0, limit = 5, userId } = query;
+    const exercises = await Exercise.find({
+      userId,
     })
-    .catch((err) => res.status(500).json(err));
+      .limit(+limit)
+      .skip(+page * +limit);
+    const count = await Exercise.countDocuments();
+    return res.status(200).json({
+      exercises,
+      totalPages: Math.ceil(count / limit),
+      currentPage: page,
+    });
+  } catch (err) {
+    return res
+      .status(500)
+      .json({ message: "Error during fetching exercises " + err.message });
+  }
 };
 
 exports.deleteExercise = async ({ params }, res) => {
@@ -67,4 +75,36 @@ exports.deleteExercise = async ({ params }, res) => {
       res.json({ message: "Exercise deleted successfully!" });
     })
     .catch((err) => res.status(500).json(err));
+};
+
+exports.updateExercise = async (req, res) => {
+  const { params = {}, body } = req;
+  try {
+    if (!Object.keys(body).length) {
+      return res.status(400).json({ message: "There is no data to update" });
+    }
+    const exercise = await Exercise.findOne({ _id: params.id });
+    const newData = {};
+    Object.keys(body).forEach((field) => {
+      if (body[field] !== exercise[field]) {
+        newData[field] = body[field];
+      }
+    });
+    if (!Object.keys(newData).length) {
+      return res.status(400).json({ message: "Please modify the properties!" });
+    }
+    const newExercise = await Exercise.findOneAndUpdate(
+      { _id: params.id },
+      newData,
+      { new: true }
+    );
+    return res.status(200).json({
+      message: "Exercise updated Successfully!",
+      exercise: newExercise,
+    });
+  } catch (err) {
+    return res
+      .status(500)
+      .json({ message: "Error during update exercise " + err.message });
+  }
 };
