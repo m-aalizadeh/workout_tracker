@@ -1,5 +1,7 @@
+import Home from "./components/Home";
+
 const App = () => {
-  return <h1>Hello React developers</h1>;
+  return <Home />;
 };
 
 export default App;
