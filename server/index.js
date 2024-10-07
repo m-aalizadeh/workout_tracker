@@ -1,5 +1,6 @@
 const express = require("express");
 const dotenv = require("dotenv");
+const cors = require("cors");
 const userRouter = require("./routes/user");
 const exerciseRouter = require("./routes/exercise");
 const { connectDb } = require("./config/database");
@@ -7,9 +8,10 @@ const { connectDb } = require("./config/database");
 dotenv.config();
 connectDb();
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 8000;
 
 const app = express();
+app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use("/api/v1/user", userRouter);
