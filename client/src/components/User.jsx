@@ -7,7 +7,7 @@ const User = () => {
   const [isSignIn, setSignIn] = useState(true);
 
   return (
-    <Visible when={isSignIn} otherwise={SignUp}>
+    <Visible when={isSignIn} otherwise={<SignUp setSignIn={setSignIn} />}>
       <SignIn setSignIn={setSignIn} />
     </Visible>
   );

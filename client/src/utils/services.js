@@ -1,4 +1,4 @@
-const BASE_URL = "http://localhost:8080/app/v1/";
+const BASE_URL = "http://localhost:8000/api/v1/";
 
 export const commonFetch = async (
   method,

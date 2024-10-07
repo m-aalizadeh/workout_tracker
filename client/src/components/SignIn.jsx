@@ -1,5 +1,6 @@
 import { useState } from "react";
-import * as yup from "yup";
+import PropTypes from "prop-types";
+import * as Yup from "yup";
 import Grid from "@mui/material/Grid2";
 import Button from "@mui/material/Button";
 import Typography from "@mui/material/Typography";
@@ -13,29 +14,23 @@ import { Formik, Field, Form } from "formik";
 import { commonFetch } from "../utils/services";
 
 const styles = () => ({ title: { fontStyle: "italic", color: "green" } });
-
-const signInValidation = () => {
-  return yup.object().shape({
-    username: yup
-      .string()
-      .required("Email/Username is required.")
-      .max(40, "Email/Username must be 40 characters at most"),
-    password: yup
-      .string()
-      .required("Password is required.")
-      .max(15, "Password must be 15 characters at most."),
-  });
-};
+const validationSchema = Yup.object().shape({
+  username: Yup.string()
+    .required("Username is required.")
+    .max(40, "Username must be 40 characters at most"),
+  password: Yup.string()
+    .required("Password is required.")
+    .max(15, "Password must be 15 characters at most."),
+});
 
 const SignIn = ({ setSignIn, classes }) => {
   const [loader, setLoader] = useState(false);
 
-  const handleSubmit = async (values) => {
-    console.log(values);
+  const submitForm = async (payload) => {
     setLoader(true);
-    const result = await commonFetch("POST", "user/signin", undefined, values);
+    const result = await commonFetch("POST", "user/signin", undefined, payload);
     if (result?.token) {
-      localStorage.setItem("user", result);
+      localStorage.setItem("user", JSON.stringify(result));
     }
     setLoader(false);
   };
@@ -61,10 +56,14 @@ const SignIn = ({ setSignIn, classes }) => {
       <Grid size={12}>
         <Formik
           initialValues={{ username: "", password: "" }}
-          validationSchema={signInValidation()}
+          validationSchema={validationSchema}
+          onSubmit={(values, { setSubmitting }) => {
+            setSubmitting(false);
+            submitForm(values);
+          }}
         >
-          {({ handleBlur, handleChange, values }) => (
-            <Form onSubmit={handleSubmit}>
+          {({ values, errors, handleChange, handleBlur, handleSubmit }) => (
+            <Form>
               <Grid
                 container
                 spacing={2}
@@ -75,11 +74,12 @@ const SignIn = ({ setSignIn, classes }) => {
                   <Field
                     as={TextField}
                     type="text"
-                    label="username/email"
+                    label="username"
                     name="username"
                     onBlur={handleBlur}
                     onChange={handleChange}
                     value={values.username}
+                    validate={errors.username}
                     required
                     fullWidth
                   />
@@ -93,16 +93,13 @@ const SignIn = ({ setSignIn, classes }) => {
                     onBlur={handleBlur}
                     onChange={handleChange}
                     value={values.password}
+                    validate={errors.password}
                     required
                     fullWidth
                   />
                 </Grid>
                 <Grid item size={6}>
-                  <Button
-                    variant="contained"
-                    fullWidth
-                    onClick={() => handleSubmit(values)}
-                  >
+                  <Button variant="contained" fullWidth onClick={handleSubmit}>
                     <Typography>Login</Typography>
                     <Visible when={loader}>
                       <CircularProgress color="secondary" size={24} />
@@ -122,6 +119,16 @@ const SignIn = ({ setSignIn, classes }) => {
       </Grid>
     </Grid>
   );
+};
+
+SignIn.propTypes = {
+  classes: PropTypes.object,
+  setSignIn: PropTypes.func,
+};
+
+SignIn.defaultProps = {
+  classes: {},
+  setSignIn: () => {},
 };
 
 export default withStyles(SignIn, styles);
