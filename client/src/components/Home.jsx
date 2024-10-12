@@ -1,8 +1,9 @@
+import PropTypes from "prop-types";
 import Grid from "@mui/material/Grid2";
 import exercise from "../source/exercise.jpg";
 import User from "./User";
 
-const Home = () => {
+const Home = ({ history }) => {
   const width = window.innerWidth / 2;
 
   return (
@@ -18,10 +19,18 @@ const Home = () => {
         />
       </Grid>
       <Grid size={6}>
-        <User />
+        <User history={history} />
       </Grid>
     </Grid>
   );
+};
+
+User.propTypes = {
+  history: PropTypes.func,
+};
+
+User.defaultProps = {
+  history: () => {},
 };
 
 export default Home;

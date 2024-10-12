@@ -10,10 +10,13 @@ import Link from "@mui/material/Link";
 import Visible from "./common/Visible";
 import heart from "../source/heart.jpeg";
 import { withStyles } from "tss-react/mui";
-import { Formik, Field, Form } from "formik";
+import { Formik, Field, ErrorMessage, Form } from "formik";
 import { commonFetch } from "../utils/services";
 
-const styles = () => ({ title: { fontStyle: "italic", color: "green" } });
+const styles = () => ({
+  title: { fontStyle: "italic", color: "green" },
+  error: { color: "red" },
+});
 
 const validationSchema = Yup.object().shape({
   username: Yup.string()
@@ -31,7 +34,7 @@ const validationSchema = Yup.object().shape({
     .oneOf([Yup.ref("password"), null], "Password must matches"),
 });
 
-const SignUp = ({ setSignIn, classes }) => {
+const SignUp = ({ setSignIn, classes, history }) => {
   const [loader, setLoader] = useState(false);
 
   const submitForm = async (payload) => {
@@ -39,6 +42,7 @@ const SignUp = ({ setSignIn, classes }) => {
     const result = await commonFetch("POST", "user/signup", undefined, payload);
     if (result?.token) {
       localStorage.setItem("user", JSON.stringify(result));
+      history("/dashboard");
     }
     setLoader(false);
   };
@@ -90,6 +94,11 @@ const SignUp = ({ setSignIn, classes }) => {
                     required
                     fullWidth
                   />
+                  <ErrorMessage
+                    className={classes.error}
+                    name="username"
+                    component="div"
+                  />
                 </Grid>
                 <Grid size={6}>
                   <Field
@@ -102,6 +111,11 @@ const SignUp = ({ setSignIn, classes }) => {
                     value={values.email}
                     required
                     fullWidth
+                  />
+                  <ErrorMessage
+                    className={classes.error}
+                    name="email"
+                    component="div"
                   />
                 </Grid>
                 <Grid size={6}>
@@ -116,6 +130,11 @@ const SignUp = ({ setSignIn, classes }) => {
                     required
                     fullWidth
                   />
+                  <ErrorMessage
+                    className={classes.error}
+                    name="password"
+                    component="div"
+                  />
                 </Grid>
                 <Grid size={6}>
                   <Field
@@ -128,6 +147,11 @@ const SignUp = ({ setSignIn, classes }) => {
                     value={values.confirmedPassword}
                     required
                     fullWidth
+                  />
+                  <ErrorMessage
+                    className={classes.error}
+                    name="confirmedPassword"
+                    component="div"
                   />
                 </Grid>
                 <Grid item size={6}>
@@ -153,11 +177,13 @@ const SignUp = ({ setSignIn, classes }) => {
 SignUp.propTypes = {
   classes: PropTypes.object,
   setSignIn: PropTypes.func,
+  history: PropTypes.func,
 };
 
 SignUp.defaultProps = {
   classes: {},
   setSignIn: () => {},
+  history: () => {},
 };
 
 export default withStyles(SignUp, styles);

@@ -10,10 +10,14 @@ import Link from "@mui/material/Link";
 import Visible from "./common/Visible";
 import heart from "../source/heart.jpeg";
 import { withStyles } from "tss-react/mui";
-import { Formik, Field, Form } from "formik";
+import { Formik, Field, ErrorMessage, Form } from "formik";
 import { commonFetch } from "../utils/services";
 
-const styles = () => ({ title: { fontStyle: "italic", color: "green" } });
+const styles = () => ({
+  title: { fontStyle: "italic", color: "green" },
+  error: { color: "red" },
+});
+
 const validationSchema = Yup.object().shape({
   username: Yup.string()
     .required("Username is required.")
@@ -23,7 +27,7 @@ const validationSchema = Yup.object().shape({
     .max(15, "Password must be 15 characters at most."),
 });
 
-const SignIn = ({ setSignIn, classes }) => {
+const SignIn = ({ setSignIn, classes, history }) => {
   const [loader, setLoader] = useState(false);
 
   const submitForm = async (payload) => {
@@ -31,6 +35,7 @@ const SignIn = ({ setSignIn, classes }) => {
     const result = await commonFetch("POST", "user/signin", undefined, payload);
     if (result?.token) {
       localStorage.setItem("user", JSON.stringify(result));
+      history("/dashboard");
     }
     setLoader(false);
   };
@@ -79,9 +84,13 @@ const SignIn = ({ setSignIn, classes }) => {
                     onBlur={handleBlur}
                     onChange={handleChange}
                     value={values.username}
-                    validate={errors.username}
                     required
                     fullWidth
+                  />
+                  <ErrorMessage
+                    className={classes.error}
+                    name="username"
+                    component="div"
                   />
                 </Grid>
                 <Grid size={6}>
@@ -93,9 +102,13 @@ const SignIn = ({ setSignIn, classes }) => {
                     onBlur={handleBlur}
                     onChange={handleChange}
                     value={values.password}
-                    validate={errors.password}
                     required
                     fullWidth
+                  />
+                  <ErrorMessage
+                    className={classes.error}
+                    name="password"
+                    component="div"
                   />
                 </Grid>
                 <Grid item size={6}>
@@ -124,11 +137,13 @@ const SignIn = ({ setSignIn, classes }) => {
 SignIn.propTypes = {
   classes: PropTypes.object,
   setSignIn: PropTypes.func,
+  history: PropTypes.func,
 };
 
 SignIn.defaultProps = {
   classes: {},
   setSignIn: () => {},
+  history: () => {},
 };
 
 export default withStyles(SignIn, styles);
