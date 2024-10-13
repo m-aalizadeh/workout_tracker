@@ -34,14 +34,17 @@ const validationSchema = Yup.object().shape({
     .oneOf([Yup.ref("password"), null], "Password must matches"),
 });
 
-const SignUp = ({ setSignIn, classes, history }) => {
+const SignUp = ({ setSignIn, classes, history, handleAddUser }) => {
   const [loader, setLoader] = useState(false);
 
   const submitForm = async (payload) => {
     setLoader(true);
     const result = await commonFetch("POST", "user/signup", undefined, payload);
     if (result?.token) {
-      localStorage.setItem("user", JSON.stringify(result));
+      const { data = {}, token } = result;
+      const { email, _id, username } = data;
+      localStorage.setItem("token", JSON.stringify(token));
+      handleAddUser({ email, userId: _id, username });
       history("/dashboard");
     }
     setLoader(false);
@@ -178,12 +181,14 @@ SignUp.propTypes = {
   classes: PropTypes.object,
   setSignIn: PropTypes.func,
   history: PropTypes.func,
+  handleAddUser: PropTypes.func,
 };
 
 SignUp.defaultProps = {
   classes: {},
   setSignIn: () => {},
   history: () => {},
+  handleAddUser: () => {},
 };
 
 export default withStyles(SignUp, styles);

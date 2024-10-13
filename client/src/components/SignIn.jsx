@@ -27,14 +27,17 @@ const validationSchema = Yup.object().shape({
     .max(15, "Password must be 15 characters at most."),
 });
 
-const SignIn = ({ setSignIn, classes, history }) => {
+const SignIn = ({ setSignIn, classes, history, handleAddUser }) => {
   const [loader, setLoader] = useState(false);
 
   const submitForm = async (payload) => {
     setLoader(true);
     const result = await commonFetch("POST", "user/signin", undefined, payload);
     if (result?.token) {
-      localStorage.setItem("user", JSON.stringify(result));
+      const { data = {}, token } = result;
+      const { email, _id, username } = data;
+      localStorage.setItem("token", JSON.stringify(token));
+      handleAddUser({ email, userId: _id, username });
       history("/dashboard");
     }
     setLoader(false);
@@ -138,12 +141,14 @@ SignIn.propTypes = {
   classes: PropTypes.object,
   setSignIn: PropTypes.func,
   history: PropTypes.func,
+  handleAddUser: PropTypes.func,
 };
 
 SignIn.defaultProps = {
   classes: {},
   setSignIn: () => {},
   history: () => {},
+  handleAddUser: () => {},
 };
 
 export default withStyles(SignIn, styles);
