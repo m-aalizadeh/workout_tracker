@@ -25,11 +25,11 @@ const Home = ({ history }) => {
   );
 };
 
-User.propTypes = {
+Home.propTypes = {
   history: PropTypes.func,
 };
 
-User.defaultProps = {
+Home.defaultProps = {
   history: () => {},
 };
 
