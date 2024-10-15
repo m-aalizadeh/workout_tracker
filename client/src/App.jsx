@@ -3,11 +3,11 @@ import Home from "./components/Home";
 import Dashboard from "./components/Dashboard";
 
 const App = () => {
-  const history = useNavigate();
+  const navigate = useNavigate();
   return (
     <Routes>
-      <Route path="/" element={<Home history={history} />} />
-      <Route path="/dashboard" element={<Dashboard />} />
+      <Route path="/" element={<Home navigate={navigate} />} />
+      <Route path="/dashboard" element={<Dashboard navigate={navigate} />} />
     </Routes>
   );
 };

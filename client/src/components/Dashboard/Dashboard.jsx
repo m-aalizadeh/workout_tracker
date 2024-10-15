@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import PropTypes from "prop-types";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import Grid from "@mui/material/Grid2";
@@ -12,10 +13,15 @@ import MenuItem from "@mui/material/MenuItem";
 
 const settings = ["Profile", "Logout"];
 
-const Dashboard = () => {
+const Dashboard = ({ handleDeleteUser, user, navigate }) => {
   const [openMenu, setOpenMenu] = useState(false);
 
-  const handleUserMenu = () => {
+  const handleUserMenu = (e = {}) => {
+    const value = e.target.textContent;
+    if (value === "Logout") {
+      handleDeleteUser();
+      navigate("/");
+    }
     setOpenMenu(!openMenu);
   };
 
@@ -27,7 +33,7 @@ const Dashboard = () => {
             <Grid align="right">
               <Tooltip title="Open settings">
                 <IconButton onClick={handleUserMenu} sx={{ p: 0 }}>
-                  <Avatar alt="Maryam Aalizadeh" />
+                  <Avatar alt={user.username} />
                 </IconButton>
               </Tooltip>
               <Menu
@@ -46,7 +52,7 @@ const Dashboard = () => {
                 onClose={handleUserMenu}
               >
                 {settings.map((setting) => (
-                  <MenuItem key={setting} onClick={handleUserMenu}>
+                  <MenuItem key={setting} onClick={(e) => handleUserMenu(e)}>
                     <Typography sx={{ textAlign: "center" }}>
                       {setting}
                     </Typography>
@@ -59,6 +65,18 @@ const Dashboard = () => {
       </Container>
     </AppBar>
   );
+};
+
+Dashboard.propTypes = {
+  user: PropTypes.object,
+  navigate: PropTypes.func,
+  handleDeleteUser: PropTypes.func,
+};
+
+Dashboard.defaultProps = {
+  user: {},
+  navigate: () => {},
+  handleDeleteUser: () => {},
 };
 
 export default Dashboard;

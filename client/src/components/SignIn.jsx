@@ -27,7 +27,7 @@ const validationSchema = Yup.object().shape({
     .max(15, "Password must be 15 characters at most."),
 });
 
-const SignIn = ({ setSignIn, classes, history, handleAddUser }) => {
+const SignIn = ({ setSignIn, classes, navigate, handleAddUser }) => {
   const [loader, setLoader] = useState(false);
 
   const submitForm = async (payload) => {
@@ -38,7 +38,7 @@ const SignIn = ({ setSignIn, classes, history, handleAddUser }) => {
       const { email, _id, username } = data;
       localStorage.setItem("token", JSON.stringify(token));
       handleAddUser({ email, userId: _id, username });
-      history("/dashboard");
+      navigate("/dashboard");
     }
     setLoader(false);
   };
@@ -140,14 +140,14 @@ const SignIn = ({ setSignIn, classes, history, handleAddUser }) => {
 SignIn.propTypes = {
   classes: PropTypes.object,
   setSignIn: PropTypes.func,
-  history: PropTypes.func,
+  navigate: PropTypes.func,
   handleAddUser: PropTypes.func,
 };
 
 SignIn.defaultProps = {
   classes: {},
   setSignIn: () => {},
-  history: () => {},
+  navigate: () => {},
   handleAddUser: () => {},
 };
 

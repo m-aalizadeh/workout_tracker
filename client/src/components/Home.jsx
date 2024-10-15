@@ -3,7 +3,7 @@ import Grid from "@mui/material/Grid2";
 import exercise from "../source/exercise.jpg";
 import User from "./User";
 
-const Home = ({ history }) => {
+const Home = ({ navigate }) => {
   const width = window.innerWidth / 2;
 
   return (
@@ -19,18 +19,18 @@ const Home = ({ history }) => {
         />
       </Grid>
       <Grid size={6}>
-        <User history={history} />
+        <User navigate={navigate} />
       </Grid>
     </Grid>
   );
 };
 
 Home.propTypes = {
-  history: PropTypes.func,
+  navigate: PropTypes.func,
 };
 
 Home.defaultProps = {
-  history: () => {},
+  navigate: () => {},
 };
 
 export default Home;

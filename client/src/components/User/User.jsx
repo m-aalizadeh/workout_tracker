@@ -4,7 +4,7 @@ import Visible from "../common/Visible";
 import SignIn from "../SignIn";
 import SignUp from "../SignUp";
 
-const User = ({ history, handleAddUser }) => {
+const User = ({ navigate, handleAddUser }) => {
   const [isSignIn, setSignIn] = useState(true);
 
   return (
@@ -13,14 +13,14 @@ const User = ({ history, handleAddUser }) => {
       otherwise={
         <SignUp
           setSignIn={setSignIn}
-          history={history}
+          navigate={navigate}
           handleAddUser={handleAddUser}
         />
       }
     >
       <SignIn
         setSignIn={setSignIn}
-        history={history}
+        navigate={navigate}
         handleAddUser={handleAddUser}
       />
     </Visible>
@@ -28,12 +28,12 @@ const User = ({ history, handleAddUser }) => {
 };
 
 User.propTypes = {
-  history: PropTypes.func,
+  navigate: PropTypes.func,
   handleAddUser: PropTypes.func,
 };
 
 User.defaultProps = {
-  history: () => {},
+  navigate: () => {},
   handleAddUser: () => {},
 };
 
