@@ -34,7 +34,13 @@ const validationSchema = Yup.object().shape({
     .oneOf([Yup.ref("password"), null], "Password must matches"),
 });
 
-const SignUp = ({ setSignIn, classes, navigate, handleAddUser }) => {
+const SignUp = ({
+  setSignIn,
+  classes,
+  navigate,
+  handleAddUser,
+  handleAddToken,
+}) => {
   const [loader, setLoader] = useState(false);
 
   const submitForm = async (payload) => {
@@ -44,6 +50,7 @@ const SignUp = ({ setSignIn, classes, navigate, handleAddUser }) => {
       const { data = {}, token } = result;
       const { email, _id, username } = data;
       localStorage.setItem("token", JSON.stringify(token));
+      handleAddToken(token);
       handleAddUser({ email, userId: _id, username });
       navigate("/dashboard");
     }
@@ -182,6 +189,7 @@ SignUp.propTypes = {
   setSignIn: PropTypes.func,
   navigate: PropTypes.func,
   handleAddUser: PropTypes.func,
+  handleAddToken: PropTypes.func,
 };
 
 SignUp.defaultProps = {
@@ -189,6 +197,7 @@ SignUp.defaultProps = {
   setSignIn: () => {},
   navigate: () => {},
   handleAddUser: () => {},
+  handleAddToken: () => {},
 };
 
 export default withStyles(SignUp, styles);

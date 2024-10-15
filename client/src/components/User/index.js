@@ -1,17 +1,18 @@
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
-import { handleAddUser } from "../../redux/actions/user";
+import { handleAddUser, handleAddToken } from "../../redux/actions/user";
 import User from "./User";
 
-function mapStateToProps(state, props) {
-  const user = state.user;
+function mapStateToProps(state) {
+  const user = state.userDetails?.user || {};
   return { user };
 }
 
-function mapDispatchToProps(dispatch, props) {
+function mapDispatchToProps(dispatch) {
   return bindActionCreators(
     {
       handleAddUser,
+      handleAddToken,
     },
     dispatch
   );

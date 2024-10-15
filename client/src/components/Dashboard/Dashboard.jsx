@@ -13,13 +13,15 @@ import MenuItem from "@mui/material/MenuItem";
 
 const settings = ["Profile", "Logout"];
 
-const Dashboard = ({ handleDeleteUser, user, navigate }) => {
+const Dashboard = ({ handleDeleteUser, handleDeleteToken, user, navigate }) => {
   const [openMenu, setOpenMenu] = useState(false);
 
   const handleUserMenu = (e = {}) => {
     const value = e.target.textContent;
     if (value === "Logout") {
+      localStorage.removeItem("token");
       handleDeleteUser();
+      handleDeleteToken();
       navigate("/");
     }
     setOpenMenu(!openMenu);
@@ -71,12 +73,14 @@ Dashboard.propTypes = {
   user: PropTypes.object,
   navigate: PropTypes.func,
   handleDeleteUser: PropTypes.func,
+  handleDeleteToken: PropTypes.func,
 };
 
 Dashboard.defaultProps = {
   user: {},
   navigate: () => {},
   handleDeleteUser: () => {},
+  handleDeleteToken: () => {},
 };
 
 export default Dashboard;

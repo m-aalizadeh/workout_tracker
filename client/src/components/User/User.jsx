@@ -4,7 +4,7 @@ import Visible from "../common/Visible";
 import SignIn from "../SignIn";
 import SignUp from "../SignUp";
 
-const User = ({ navigate, handleAddUser }) => {
+const User = ({ navigate, handleAddToken, handleAddUser }) => {
   const [isSignIn, setSignIn] = useState(true);
 
   return (
@@ -15,6 +15,7 @@ const User = ({ navigate, handleAddUser }) => {
           setSignIn={setSignIn}
           navigate={navigate}
           handleAddUser={handleAddUser}
+          handleAddToken={handleAddToken}
         />
       }
     >
@@ -22,6 +23,7 @@ const User = ({ navigate, handleAddUser }) => {
         setSignIn={setSignIn}
         navigate={navigate}
         handleAddUser={handleAddUser}
+        handleAddToken={handleAddToken}
       />
     </Visible>
   );
@@ -30,11 +32,13 @@ const User = ({ navigate, handleAddUser }) => {
 User.propTypes = {
   navigate: PropTypes.func,
   handleAddUser: PropTypes.func,
+  handleAddToken: PropTypes.func,
 };
 
 User.defaultProps = {
   navigate: () => {},
   handleAddUser: () => {},
+  handleAddToken: () => {},
 };
 
 export default User;
