@@ -14,6 +14,11 @@ const userSchema = new Schema({
     minLength: 6,
     required: "Password is required",
   },
+  role: {
+    type: String,
+    enum: ["admin", "mentor"],
+    default: "admin",
+  },
   exercise: [{ type: Schema.Types.ObjectId, ref: "Exercise" }],
 });
 

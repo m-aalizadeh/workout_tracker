@@ -5,7 +5,7 @@ const { signToken } = require("../utils/isAuth");
 
 exports.signUp = async (req, res) => {
   try {
-    const { username, password, email } = req.body;
+    const { username, password, email, role } = req.body;
     const errors = validationResult(req).array();
     if (errors.length) {
       return res.status(422).json({
@@ -13,6 +13,7 @@ exports.signUp = async (req, res) => {
         oldInput: {
           email,
           username,
+          role,
         },
         validationErrors: errors,
       });
@@ -22,6 +23,7 @@ exports.signUp = async (req, res) => {
       username,
       email,
       password: hashedPassword,
+      role,
     });
     await newUser.save();
     return res.status(200).json({
