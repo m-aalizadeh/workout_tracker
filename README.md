@@ -1,4 +1,4 @@
 # workout_tracker
 
-cd server
+cd server                                                                                                                                                                         
 npm start
