@@ -1,13 +1,13 @@
 const express = require("express");
 const { check, body } = require("express-validator");
-const Users = require("../models/Users");
+const Customer = require("../models/Customer");
 const {
   addUser,
   getUser,
   getAllUsers,
   updateUser,
   deleteUser,
-} = require("../controllers/users");
+} = require("../controllers/customer");
 const { verifyToken } = require("../utils/isAuth");
 const router = express.Router();
 
@@ -24,7 +24,7 @@ router.post(
       .isEmail()
       .withMessage("Please enter a valid email.")
       .custom((value) => {
-        return Users.findOne({ email: value }).then((userDoc) => {
+        return Customer.findOne({ email: value }).then((userDoc) => {
           if (userDoc) {
             return Promise.reject(
               "E-Mail exists already, please pick a different one."
@@ -41,7 +41,7 @@ router.post(
         "Minimum length for username is 5, Maximum length for username is 20."
       )
       .custom((value, { req }) => {
-        return Users.findOne({ username: value }).then((userDoc) => {
+        return Customer.findOne({ username: value }).then((userDoc) => {
           if (userDoc) {
             return Promise.reject(
               "Username exists already, please pick a different one."

@@ -77,3 +77,15 @@ exports.getAllUsers = async (req, res) => {
     return res.status(500).json({ message: "Error during fetching users " });
   }
 };
+
+exports.validateToken = async (req, res) => {
+  try {
+    return res
+      .status(200)
+      .json({ status: "success", message: "Token is valid" });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ status: "error", message: "Error during fetching users " });
+  }
+};

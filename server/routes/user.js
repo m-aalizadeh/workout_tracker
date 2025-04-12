@@ -1,7 +1,12 @@
 const express = require("express");
 const { check, body } = require("express-validator");
 const User = require("../models/User");
-const { signUp, signin, getAllUsers } = require("../controllers/user");
+const {
+  signUp,
+  signin,
+  getAllUsers,
+  validateToken,
+} = require("../controllers/user");
 const { verifyToken } = require("../utils/isAuth");
 const router = express.Router();
 
@@ -64,5 +69,6 @@ router.post(
   signin
 );
 router.get("/allUsers", verifyToken, getAllUsers);
+router.get("/verifyToken", verifyToken, validateToken);
 
 module.exports = router;
