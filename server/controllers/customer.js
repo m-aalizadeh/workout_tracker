@@ -7,7 +7,8 @@ exports.addUser = async (req, res) => {
     const errors = validationResult(req).array();
     if (errors.length) {
       return res.status(422).json({
-        errorMessage: "User creation got failed!",
+        status: "error",
+        message: "User creation got failed!",
         oldInput: {
           name,
           username,
@@ -27,12 +28,14 @@ exports.addUser = async (req, res) => {
     });
     await newUser.save();
     return res.status(200).json({
+      status: "success",
       message: "User Created Successfully",
       newUser,
     });
   } catch (error) {
-    console.log(error.message);
-    return res.status(500).json({ message: "Error creating user" });
+    return res
+      .status(500)
+      .json({ status: "error", message: "User creation got failed!" });
   }
 };
 
@@ -44,14 +47,16 @@ exports.getAllUsers = async ({ query = {} }, res) => {
       .skip(+page * +limit);
     const count = await Customer.countDocuments();
     return res.status(200).json({
+      status: "success",
       users,
       totalPages: Math.ceil(count / limit),
       currentPage: page,
     });
   } catch (err) {
-    return res
-      .status(500)
-      .json({ message: "Error during fetching users " + err.message });
+    return res.status(500).json({
+      status: "error",
+      message: "Error during fetching users " + err.message,
+    });
   }
 };
 
@@ -59,7 +64,9 @@ exports.updateUser = async (req, res) => {
   const { params = {}, body } = req;
   try {
     if (!Object.keys(body).length) {
-      return res.status(400).json({ message: "There is no data to update" });
+      return res
+        .status(400)
+        .json({ status: "error", message: "There is no data to update" });
     }
     const user = await Customer.findOne({ _id: params.id });
     const newData = {};
@@ -69,7 +76,9 @@ exports.updateUser = async (req, res) => {
       }
     });
     if (!Object.keys(newData).length) {
-      return res.status(400).json({ message: "Please modify the properties!" });
+      return res
+        .status(400)
+        .json({ status: "error", message: "Please modify the properties!" });
     }
     const newUser = await Customer.findOneAndUpdate(
       { _id: params.id },
@@ -79,13 +88,15 @@ exports.updateUser = async (req, res) => {
       }
     );
     return res.status(200).json({
+      status: "success",
       message: "User updated Successfully!",
       newUser,
     });
   } catch (err) {
-    return res
-      .status(500)
-      .json({ message: "Error during update customer  " + err.message });
+    return res.status(500).json({
+      status: "error",
+      message: "Error during update customer  " + err.message,
+    });
   }
 };
 
@@ -100,7 +111,11 @@ exports.deleteUser = async ({ params }, res) => {
       }
       res.json({ message: "User deleted successfully!", status: "success" });
     })
-    .catch((err) => res.status(500).json(err));
+    .catch((err) =>
+      res
+        .status(500)
+        .json({ status: "error", message: "Error during delete user" })
+    );
 };
 
 exports.getUser = async ({ params }, res) => {
@@ -114,5 +129,9 @@ exports.getUser = async ({ params }, res) => {
       }
       res.json({ user: dbUserData, status: "success" });
     })
-    .catch((err) => res.status(500).json(err));
+    .catch((err) =>
+      res
+        .status(500)
+        .json({ status: "error", message: "Error during fetching user" })
+    );
 };

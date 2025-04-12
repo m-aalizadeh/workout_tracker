@@ -7,8 +7,9 @@ exports.addExercise = async (req, res) => {
   const { body } = req;
   if (errors.length) {
     return res.status(422).json({
+      status: "error",
       exercise: body,
-      errorMessage: "Exercise creation got failed!",
+      message: "Exercise creation got failed!",
       validationErrors: errors,
     });
   }
@@ -23,10 +24,11 @@ exports.addExercise = async (req, res) => {
     .then((dbUserData) => {
       if (!dbUserData) {
         return res.status(404).json({
+          status: "error",
           message: "Exercise created but there is no user with this id!",
         });
       }
-      res.json({ message: "Exercise created successfully!" });
+      res.json({ status: "error", message: "Exercise created successfully!" });
     })
     .catch((err) => err.status(500).json(err));
 };
@@ -41,14 +43,16 @@ exports.getExerciseById = async ({ query = {} }, res) => {
       .skip(+page * +limit);
     const count = await Exercise.countDocuments();
     return res.status(200).json({
+      status: "success",
       exercises,
       totalPages: Math.ceil(count / limit),
       currentPage: page,
     });
   } catch (err) {
-    return res
-      .status(500)
-      .json({ message: "Error during fetching exercises " + err.message });
+    return res.status(500).json({
+      status: "error",
+      message: "Error during fetching exercises " + err.message,
+    });
   }
 };
 
@@ -56,9 +60,10 @@ exports.deleteExercise = async ({ params }, res) => {
   Exercise.findOneAndDelete({ _id: params.id })
     .then((dbExerciseData) => {
       if (!dbExerciseData) {
-        return res
-          .status(404)
-          .json({ message: "No exercise data found with this id!" });
+        return res.status(404).json({
+          status: "error",
+          message: "No exercise data found with this id!",
+        });
       }
       return User.findOneAndUpdate(
         { exercise: params.id },
@@ -69,19 +74,26 @@ exports.deleteExercise = async ({ params }, res) => {
     .then((dbUserData) => {
       if (!dbUserData) {
         return res.status(404).json({
+          status: "error",
           message: "Exercise deleted but there is no user with this id!",
         });
       }
-      res.json({ message: "Exercise deleted successfully!" });
+      res.json({ status: "error", message: "Exercise deleted successfully!" });
     })
-    .catch((err) => res.status(500).json(err));
+    .catch((err) =>
+      res
+        .status(500)
+        .json({ status: "error", message: "Error while deleteing user" })
+    );
 };
 
 exports.updateExercise = async (req, res) => {
   const { params = {}, body } = req;
   try {
     if (!Object.keys(body).length) {
-      return res.status(400).json({ message: "There is no data to update" });
+      return res
+        .status(400)
+        .json({ status: "error", message: "There is no data to update" });
     }
     const exercise = await Exercise.findOne({ _id: params.id });
     const newData = {};
@@ -91,7 +103,9 @@ exports.updateExercise = async (req, res) => {
       }
     });
     if (!Object.keys(newData).length) {
-      return res.status(400).json({ message: "Please modify the properties!" });
+      return res
+        .status(400)
+        .json({ status: "error", message: "Please modify the properties!" });
     }
     const newExercise = await Exercise.findOneAndUpdate(
       { _id: params.id },
@@ -99,12 +113,16 @@ exports.updateExercise = async (req, res) => {
       { new: true }
     );
     return res.status(200).json({
+      status: "success",
       message: "Exercise updated Successfully!",
       exercise: newExercise,
     });
   } catch (err) {
     return res
       .status(500)
-      .json({ message: "Error during update exercise " + err.message });
+      .json({
+        status: "error",
+        message: "Error during update exercise " + err.message,
+      });
   }
 };
