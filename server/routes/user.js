@@ -7,11 +7,16 @@ const {
   getAllUsers,
   validateToken,
 } = require("../controllers/user");
+const { getCsrfToken } = require("../controllers/csrf");
 const { verifyToken } = require("../utils/isAuth");
+const { csrfProtection, ensureCsrfToken } = require("../utils/csrf");
 const router = express.Router();
 
+router.get("/csrf-token", csrfProtection, getCsrfToken);
 router.post(
   "/signup",
+  csrfProtection,
+  ensureCsrfToken,
   [
     check("email")
       .isEmail()
@@ -56,6 +61,8 @@ router.post(
 
 router.post(
   "/signin",
+  csrfProtection,
+  ensureCsrfToken,
   [
     body("username").isString().withMessage("Username must be string!").trim(),
     body("password")

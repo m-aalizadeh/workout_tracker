@@ -1,6 +1,8 @@
 const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
+const cookieParser = require("cookie-parser");
+const csrf = require("csurf");
 const userRouter = require("./routes/user");
 const exerciseRouter = require("./routes/exercise");
 const usersRouter = require("./routes/customer");
@@ -12,6 +14,7 @@ connectDb();
 const port = process.env.PORT || 8000;
 
 const app = express();
+app.use(cookieParser());
 app.use(cors());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
