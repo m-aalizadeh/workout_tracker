@@ -41,8 +41,9 @@ exports.addUser = async (req, res) => {
 
 exports.getAllUsers = async ({ query = {} }, res) => {
   try {
-    const { page = 0, limit = 5 } = query;
-    const users = await Customer.find({})
+    const { page = 0, limit = 5, status } = query;
+    const queryParams = status ? { status } : {};
+    const users = await Customer.find(queryParams)
       .limit(+limit)
       .skip(+page * +limit);
     const count = await Customer.countDocuments();
@@ -50,6 +51,7 @@ exports.getAllUsers = async ({ query = {} }, res) => {
       status: "success",
       users,
       totalPages: Math.ceil(count / limit),
+      totalCount: count,
       currentPage: page,
     });
   } catch (err) {
