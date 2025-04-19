@@ -7,6 +7,7 @@ const userRouter = require("./routes/user");
 const exerciseRouter = require("./routes/exercise");
 const usersRouter = require("./routes/customer");
 const fileRouter = require("./routes/file");
+const otpRouter = require("./routes/otp");
 const { connectDb } = require("./config/database");
 
 dotenv.config();
@@ -23,6 +24,7 @@ app.use("/api/v1/user", userRouter);
 app.use("/api/v1/exercise", exerciseRouter);
 app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/files", fileRouter);
+app.use("/api/v1/otp/", otpRouter);
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to workout tracker application!!!" });
 });
