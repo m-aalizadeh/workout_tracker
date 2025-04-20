@@ -1,4 +1,5 @@
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken");
 const { validationResult } = require("express-validator");
 const User = require("../models/User");
 const { signToken } = require("../utils/isAuth");
@@ -55,7 +56,7 @@ exports.signin = async (req, res) => {
     const user = await User.findOne({ username });
     if (!user) {
       return res
-        .status(401)
+        .status(400)
         .json({ status: "error", message: "Invalid username or password" });
     }
     const passwordMatch = await bcrypt.compare(password, user.password);
@@ -82,6 +83,24 @@ exports.getAllUsers = async (req, res) => {
   try {
     const users = await User.find({}, { password: 0 });
     return res.status(200).json({ status: "success", users });
+  } catch (error) {
+    return res
+      .status(500)
+      .json({ status: "error", message: "Error during fetching users " });
+  }
+};
+
+exports.getCurrentUser = async (req, res) => {
+  try {
+    const token = req.headers.authorization.split(" ")[1];
+    const decoded = await jwt.verify(token, process.env.SECRET_KEY);
+    const user = await User.findById(decoded.userId);
+    if (!user) {
+      return res
+        .status(404)
+        .json({ status: "error", message: "User not found" });
+    }
+    return res.status(200).json({ status: "success", user });
   } catch (error) {
     return res
       .status(500)

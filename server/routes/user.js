@@ -6,6 +6,7 @@ const {
   signin,
   getAllUsers,
   validateToken,
+  getCurrentUser,
 } = require("../controllers/user");
 const { getCsrfToken } = require("../controllers/csrf");
 const { verifyToken } = require("../utils/isAuth");
@@ -75,6 +76,7 @@ router.post(
   ],
   signin
 );
+router.get("/currentUser", verifyToken, getCurrentUser);
 router.get("/allUsers", verifyToken, getAllUsers);
 router.get("/verifyToken", verifyToken, validateToken);
 
