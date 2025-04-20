@@ -24,7 +24,9 @@ exports.uploadFile = async (req, res) => {
 
 exports.getFile = async (req, res) => {
   try {
-    const file = await File.findById(req.params.userId);
+    const file = await File.findOne({ userId: req.params.userId }).sort({
+      uploadDate: -1,
+    });
     if (!file) {
       return res
         .status(404)
@@ -32,7 +34,7 @@ exports.getFile = async (req, res) => {
     }
     res.set("Content-Type", file.contentType);
     res.set("Content-Disposition", `attachment; filename="${file.name}"`);
-    res.send(file.data);
+    return res.status(200).json({ status: "success", data: file.data });
   } catch (err) {
     res.status(500).json({ status: "error", message: err.message });
   }
