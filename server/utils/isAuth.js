@@ -22,7 +22,7 @@ exports.verifyToken = async (req, res, next) => {
 };
 
 exports.signToken = (payload) => {
-  return jwt.sign(payload, process.env.SECRET_KEY || "1234!@#%<{*&)", {
-    expiresIn: process.env.JWT_EXPIRE || "1d",
+  return jwt.sign(payload, process.env.SECRET_KEY, {
+    expiresIn: process.env.JWT_EXPIRE,
   });
 };
