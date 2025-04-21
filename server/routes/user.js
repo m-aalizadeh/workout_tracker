@@ -2,6 +2,7 @@ const express = require("express");
 const { check, body } = require("express-validator");
 const User = require("../models/User");
 const {
+  logout,
   signUp,
   signin,
   getAllUsers,
@@ -76,6 +77,7 @@ router.post(
   ],
   signin
 );
+router.get("/logout", logout);
 router.get("/currentUser", verifyToken, getCurrentUser);
 router.get("/allUsers", verifyToken, getAllUsers);
 router.get("/verifyToken", verifyToken, validateToken);

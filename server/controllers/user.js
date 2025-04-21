@@ -28,10 +28,17 @@ exports.signUp = async (req, res) => {
       role,
     });
     await newUser.save();
+    const token = signToken({ username, userId: newUser._id.toString() });
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 24 * 60 * 60 * 1000,
+    });
     return res.status(200).json({
       status: "success",
       message: "User Created Successfully",
-      token: signToken({ username, userId: newUser._id.toString() }),
+      // token: signToken({ username, userId: newUser._id.toString() }),
       newUser,
     });
   } catch (error) {
@@ -66,11 +73,17 @@ exports.signin = async (req, res) => {
         .json({ status: "error", message: "Invalid password" });
     }
     const token = signToken({ username, userId: user._id.toString() });
+    res.cookie("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 24 * 60 * 60 * 1000, // 1 day
+    });
     return res.status(200).json({
       status: "success",
       message: "User signed in successfully",
       data: user,
-      token: token,
+      // token: token,
     });
   } catch (error) {
     return res
@@ -90,9 +103,16 @@ exports.getAllUsers = async (req, res) => {
   }
 };
 
+exports.logout = (req, res) => {
+  res.clearCookie("token");
+  res
+    .status(200)
+    .json({ status: "success", message: "Logged out successfully" });
+};
+
 exports.getCurrentUser = async (req, res) => {
   try {
-    const token = req.headers.authorization.split(" ")[1];
+    const token = req.cookies.token;
     const decoded = await jwt.verify(token, process.env.SECRET_KEY);
     const user = await User.findById(decoded.userId);
     if (!user) {
