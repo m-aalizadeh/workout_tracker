@@ -2,7 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const csrf = require("csurf");
+const helmet = require("helmet");
 const userRouter = require("./routes/user");
 const exerciseRouter = require("./routes/exercise");
 const usersRouter = require("./routes/customer");
@@ -17,8 +17,17 @@ const port = process.env.PORT || 8000;
 const app = express();
 app.use(cookieParser());
 app.use(
+  helmet({
+    hsts: {
+      maxAge: 31536000,
+      includeSubDomains: true,
+      preload: true,
+    },
+  })
+);
+app.use(
   cors({
-    origin: "http://localhost:3000", // Your Next.js app origin
+    origin: "http://localhost:3000",
     credentials: true,
   })
 );
