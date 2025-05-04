@@ -2,7 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const csrf = require("csurf");
+const timeout = require("connect-timeout");
 const userRouter = require("./routes/user");
 const exerciseRouter = require("./routes/exercise");
 const usersRouter = require("./routes/customer");
@@ -15,6 +15,13 @@ connectDb();
 const port = process.env.PORT || 8000;
 
 const app = express();
+app.use(timeout("5s"));
+app.use((req, res, next) => {
+  if (!req.timedout) {
+    return;
+  }
+  next();
+});
 app.use(cookieParser());
 app.use(
   cors({
@@ -30,5 +37,14 @@ app.use("/api/v1/users", usersRouter);
 app.use("/api/v1/files", fileRouter);
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to workout tracker application!!!" });
+});
+app.use((err, req, res, next) => {
+  if (req.timedout) {
+    if (!res.headersSet) {
+      return res
+        .status(503)
+        .json({ status: "error", message: "Request timed out" });
+    }
+  }
 });
 app.listen(port, () => console.log("Server is running on port %d", port));
