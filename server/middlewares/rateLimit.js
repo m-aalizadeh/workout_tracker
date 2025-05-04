@@ -2,7 +2,7 @@ const rateLimitMap = new Map();
 
 const customRateLimiter = (req, res, next) => {
   const ip = req.ip;
-  const limit = 5;
+  const limit = 100;
   const windowMs = 15 * 60 * 1000;
 
   if (!rateLimitMap.has(ip)) {
