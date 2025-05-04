@@ -3,10 +3,7 @@ const dotenv = require("dotenv");
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const timeout = require("express-timeout-handler");
-const userRouter = require("./routes/user");
-const exerciseRouter = require("./routes/exercise");
-const usersRouter = require("./routes/customer");
-const fileRouter = require("./routes/file");
+const routes = require("./routes");
 const rateLimit = require("./middlewares/rateLimit");
 const { connectDb } = require("./config/database");
 
@@ -38,8 +35,5 @@ app.use(
     },
   })
 );
-app.use("/api/v1/user", userRouter);
-app.use("/api/v1/exercise", exerciseRouter);
-app.use("/api/v1/users", usersRouter);
-app.use("/api/v1/files", fileRouter);
+app.use("/api/v1", routes);
 app.listen(port, () => console.log("Server is running on port %d", port));
