@@ -17,7 +17,7 @@ const port = process.env.PORT || 8000;
 
 const app = express();
 
-// app.use(rateLimit);
+app.use(rateLimit);
 app.use(cookieParser());
 app.use(
   cors({
