@@ -5,3 +5,13 @@
 {"duration":1926,"level":"warn","message":"Slow Request","method":"POST","status":200,"threshold":"1000ms","timestamp":"2025-05-05T10:47:28.605Z","url":"/api/v1/user/signin","userId":null}
 {"ip":"::1","level":"info","message":"Request","method":"GET","timestamp":"2025-05-05T10:47:35.686Z","url":"/api/v1/users/allUsers?status=inactive","userAgent":"PostmanRuntime/7.43.4","userId":null}
 {"duration":19,"level":"info","message":"Response","method":"GET","status":200,"timestamp":"2025-05-05T10:47:35.705Z","url":"/api/v1/users/allUsers?status=inactive","userId":null}
+{"ip":"::1","level":"info","message":"Request","method":"GET","timestamp":"2025-05-05T12:05:10.786Z","url":"/api/v1/users/allUsers?status=%3Cimage%20inactive%20/%3E","userAgent":"PostmanRuntime/7.43.4","userId":null}
+{"duration":741,"level":"info","message":"Response","method":"GET","status":200,"timestamp":"2025-05-05T12:05:11.526Z","url":"/api/v1/users/allUsers?status=%3Cimage%20inactive%20/%3E","userId":null}
+{"ip":"::1","level":"info","message":"Request","method":"GET","timestamp":"2025-05-05T12:06:51.984Z","url":"/api/v1/users/allUsers?status=%3C%3C%3Cinactive%20/%3E","userAgent":"PostmanRuntime/7.43.4","userId":null}
+{"duration":9,"level":"info","message":"Response","method":"GET","status":200,"timestamp":"2025-05-05T12:06:51.993Z","url":"/api/v1/users/allUsers?status=%3C%3C%3Cinactive%20/%3E","userId":null}
+{"ip":"::1","level":"info","message":"Request","method":"GET","timestamp":"2025-05-05T12:06:57.763Z","url":"/api/v1/users/allUsers?status=%3C%3C%3Cinactive","userAgent":"PostmanRuntime/7.43.4","userId":null}
+{"duration":6,"level":"info","message":"Response","method":"GET","status":200,"timestamp":"2025-05-05T12:06:57.769Z","url":"/api/v1/users/allUsers?status=%3C%3C%3Cinactive","userId":null}
+{"ip":"::1","level":"info","message":"Request","method":"GET","timestamp":"2025-05-05T12:07:06.162Z","url":"/api/v1/users/allUsers?status=inactive%3C%3C%3C%3E%3E%3E%3E%3E","userAgent":"PostmanRuntime/7.43.4","userId":null}
+{"duration":6,"level":"info","message":"Response","method":"GET","status":200,"timestamp":"2025-05-05T12:07:06.168Z","url":"/api/v1/users/allUsers?status=inactive%3C%3C%3C%3E%3E%3E%3E%3E","userId":null}
+{"ip":"::1","level":"info","message":"Request","method":"GET","timestamp":"2025-05-05T12:07:13.072Z","url":"/api/v1/users/allUsers?status=inactive","userAgent":"PostmanRuntime/7.43.4","userId":null}
+{"duration":9,"level":"info","message":"Response","method":"GET","status":200,"timestamp":"2025-05-05T12:07:13.081Z","url":"/api/v1/users/allUsers?status=inactive","userId":null}

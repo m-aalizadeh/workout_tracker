@@ -3,6 +3,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const rateLimit = require("./middlewares/rateLimit");
 const timeout = require("./middlewares/timeLimit");
+const { sanitizeInputMiddleware } = require("./middlewares/sanitize");
 const { activityLogger, errorLogger } = require("./middlewares/activityLogger");
 const routes = require("./routes");
 const dotenv = require("dotenv");
@@ -26,6 +27,7 @@ app.use(
 app.use(express.urlencoded({ extended: true }));
 app.use(activityLogger);
 app.use(express.json());
+app.use(sanitizeInputMiddleware);
 app.use(timeout);
 app.use("/api/v1", routes);
 app.use(errorLogger);
