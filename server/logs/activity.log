@@ -1,7 +1,0 @@
-{"ip":"::1","level":"info","message":"Request","method":"GET","timestamp":"2025-05-05T10:46:54.740Z","url":"/api/v1/users/allUsers?status=inactive","userAgent":"PostmanRuntime/7.43.4","userId":null}
-{"duration":608,"level":"info","message":"Response","method":"GET","status":401,"timestamp":"2025-05-05T10:46:55.347Z","url":"/api/v1/users/allUsers?status=inactive","userId":null}
-{"ip":"::1","level":"info","message":"Request","method":"POST","timestamp":"2025-05-05T10:47:26.677Z","url":"/api/v1/user/signin","userAgent":"PostmanRuntime/7.43.4","userId":null}
-{"duration":1926,"level":"info","message":"Response","method":"POST","status":200,"timestamp":"2025-05-05T10:47:28.603Z","url":"/api/v1/user/signin","userId":null}
-{"duration":1926,"level":"warn","message":"Slow Request","method":"POST","status":200,"threshold":"1000ms","timestamp":"2025-05-05T10:47:28.605Z","url":"/api/v1/user/signin","userId":null}
-{"ip":"::1","level":"info","message":"Request","method":"GET","timestamp":"2025-05-05T10:47:35.686Z","url":"/api/v1/users/allUsers?status=inactive","userAgent":"PostmanRuntime/7.43.4","userId":null}
-{"duration":19,"level":"info","message":"Response","method":"GET","status":200,"timestamp":"2025-05-05T10:47:35.705Z","url":"/api/v1/users/allUsers?status=inactive","userId":null}
