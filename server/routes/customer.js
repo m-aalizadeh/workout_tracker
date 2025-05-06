@@ -9,6 +9,7 @@ const {
   deleteUser,
 } = require("../controllers/customer");
 const { verifyToken } = require("../utils/isAuth");
+const { checkAdmin } = require("../utils/authorize");
 const router = express.Router();
 
 const UserStatus = {
@@ -17,6 +18,7 @@ const UserStatus = {
 };
 
 router.use(verifyToken);
+router.use(checkAdmin);
 router.post(
   "/addUser",
   [
