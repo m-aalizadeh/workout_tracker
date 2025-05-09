@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
+const xss = require("xss-clean");
 const cookieParser = require("cookie-parser");
 const rateLimit = require("./middlewares/rateLimit");
 const timeout = require("./middlewares/timeLimit");
@@ -23,6 +24,7 @@ app.use(
     preload: true,
   })
 );
+app.use(xss());
 app.use(rateLimit);
 app.use(cookieParser());
 app.use(

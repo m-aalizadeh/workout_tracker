@@ -25,7 +25,8 @@
     "mongoose": "^8.5.3",
     "multer": "^1.4.5-lts.2",
     "save": "^2.9.0",
-    "winston": "^3.17.0"
+    "winston": "^3.17.0",
+    "xss-clean": "^0.1.4"
   },
   "devDependencies": {
     "nodemon": "^3.1.9"
